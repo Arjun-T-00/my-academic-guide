@@ -50,7 +50,7 @@ My Academic Guide helps students organize their academic activities in one place
 Before running the project, make sure you have:
 
 - Java Development Kit (JDK)
-- MySQL Server
+- MySQL Server 8.0+
 - MySQL Workbench (optional, for database management)
 - Git
 
@@ -68,35 +68,47 @@ git clone https://github.com/Arjun-T-00/my-academic-guide.git
 cd my-academic-guide
 ```
 
-### 3. Create the database
+### 3. Set up the MySQL database
 
-Open MySQL Workbench and execute:
+The project includes a database setup script:
 
-```sql
-CREATE DATABASE academic_guide;
-```
+`database/schema.sql`
 
-### 4. Configure the database password
+To create the database and required tables:
+
+1. Open MySQL Workbench.
+2. Open the `database/schema.sql` file from the cloned project.
+3. Execute the entire SQL script.
+
+The script automatically creates the `academic_guide` database and the following five tables:
+
+- `students`
+- `notes`
+- `tasks`
+- `subjects`
+- `pdfs`
+
+### 4. Configure database credentials
 
 The application uses an environment variable for the MySQL password.
 
-On Windows PowerShell:
+On Windows PowerShell, execute:
 
 ```powershell
 setx DB_PASSWORD "YOUR_MYSQL_PASSWORD"
 ```
 
-Replace `YOUR_MYSQL_PASSWORD` with your local MySQL password.
+Replace `YOUR_MYSQL_PASSWORD` with your own local MySQL password.
 
 Restart your terminal or VS Code after setting the variable.
 
-The database configuration is in:
+The database configuration is located at:
 
 `src/main/resources/application.properties`
 
 ### 5. Run the application
 
-On Windows:
+On Windows, execute:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
@@ -113,14 +125,23 @@ http://localhost:8080
 ```text
 my-academic-guide/
 │
+├── database/
+│   └── schema.sql
+│
 ├── .mvn/
+│
 ├── src/
 │   ├── main/
 │   │   ├── java/com/academicguide/
-│   │   │   ├── controllers
-│   │   │   ├── repositories
-│   │   │   ├── models
-│   │   │   └── services
+│   │   │   ├── AcademicGuideApplication.java
+│   │   │   ├── HomeController.java
+│   │   │   ├── LoginController.java
+│   │   │   ├── RegistrationController.java
+│   │   │   ├── Student.java
+│   │   │   ├── Note.java
+│   │   │   ├── Task.java
+│   │   │   ├── Subject.java
+│   │   │   └── repositories and services
 │   │   │
 │   │   └── resources/
 │   │       ├── templates/
@@ -128,7 +149,9 @@ my-academic-guide/
 │   │
 │   └── test/
 │
+├── uploads/             (local PDF storage; not tracked by Git)
 ├── .gitignore
+├── README.md
 ├── mvnw
 ├── mvnw.cmd
 └── pom.xml

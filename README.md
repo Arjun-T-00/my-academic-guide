@@ -22,7 +22,7 @@ My Academic Guide helps students organize their academic activities in one place
 - Mark tasks as completed or undo completion.
 - Manage tasks independently for each student.
 
-### 📚 PDF Library
+### 📚 My PDFs
 - Create custom subjects.
 - Upload PDF study materials.
 - Organize PDFs using custom titles.

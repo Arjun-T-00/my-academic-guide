@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List | Academic Guide</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #0D0815;
+            color: white;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #F5CB62;
+            text-align: center;
+        }
+
+        .task-box {
+            background: #211532;
+            border: 1px solid #B89435;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        input, textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            margin: 10px 0;
+            border: 1px solid #B89435;
+            border-radius: 8px;
+            background: #15101F;
+            color: white;
+        }
+
+        
+        button {
+            padding: 11px 20px;
+            border: 1px solid #F5CB62;
+            border-radius: 8px;
+            background: #8B24E8;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s ease;
+            }
+
+        button:hover {
+            background: #A344F0;
+            border-color: #FFD966;
+            box-shadow: 0 0 10px #F5CB6244;
+        }
+
+       .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .task-actions form {
+            margin: 0;
+        }
+
+        .edit-button {
+            color: #B44CFF;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .edit-button:hover {
+            color: #D29AFF;
+            text-decoration: none;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #E57373;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background: none;
+            border: none;
+            box-shadow: none;
+            color: #8B0000;
+        }
+
+        .task-card {
+            background: #15101F;
+            border: 1px solid #B89435;
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .task-card h3 {
+            color: #F5CB62;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .task-card p {
+            color: #D0C5DF;
+        }
+
+        .back-link {
+            color: #B44CFF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: #F5CB62;
+            text-decoration: none;
+        }
+
+        .task-card h3.completed-task {
+            color: #F5CB62;
+            text-decoration-line: line-through;
+            text-decoration-color: #8B0000 !important;
+            text-decoration-thickness: 3.75px;
+            opacity: 1;
+        }
+
+        .task-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-card form {
+            margin-top: 12px;
+        }
+
+        .task-card form:first-of-type {
+            align-self: flex-end;
+        }
+
+        .task-card button {
+        margin-top: 0;
+        }
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .task-actions form {
+            display: block;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/" class="back-link">← Back to Home</a>
+
+    <h1>My To-Do List</h1>
+
+    <section class="task-box">
+
+        <h2>Add a New Task</h2>
+
+         
+    <form action="/tasks" method="post">
+
+        <input type="hidden" name="id" th:value="${task.id}">
+
+        <input type="text"
+           name="title"
+           th:value="${task.title}"
+           placeholder="Enter task title"
+           required>
+
+        <textarea name="description"
+              th:text="${task.description}"
+              placeholder="Enter task description">
+        </textarea>
+
+        <button type="submit"
+            th:text="${task.id > 0 ? 'Update Task' : 'Add Task'}">
+            Add Task
+        </button>
+
+    </form>
+        
+
+    </section>
+
+    <section class="task-box">
+
+        <h2>My Tasks</h2>
+
+        <p th:if="${tasks == null or #lists.isEmpty(tasks)}">
+            No tasks yet. Add your first task!
+        </p>
+
+        
+    <article th:each="task : ${tasks}" class="task-card">
+
+        <h3 th:text="${task.title}"
+            th:classappend="${task.completed} ? ' completed-task' : ''">
+            Task title
+        </h3>
+
+        <p th:text="${task.description}">Task description</p>
+
+        <!-- Complete / Undo button (unchanged) -->
+        <form th:action="@{/tasks/toggle/{id}(id=${task.id})}"
+              method="post">
+
+            <button type="submit"
+                    th:text="${task.completed} ? 'Mark as Pending' : 'Mark as Completed'">
+                Mark as Completed
+            </button>
+        </form>
+
+        <!-- Edit and Delete buttons -->
+        <div class="task-actions">
+
+            <a th:href="@{/tasks/edit/{id}(id=${task.id})}"
+                class="edit-button">
+                Edit
+            </a>
+
+            <form th:action="@{/tasks/delete/{id}(id=${task.id})}"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this task?');">
+
+                <button type="submit" class="delete-button">
+                    Delete
+                </button>
+            </form>
+        </div>
+
+    </article>
+
+    </section>
+
+</div>
+
+</body>
+</html>

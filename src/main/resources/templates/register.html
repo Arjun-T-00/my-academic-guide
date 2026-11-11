@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - My Academic Guide</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #08070D;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .register-container {
+            width: 90%;
+            max-width: 420px;
+            padding: 35px;
+            background: #15101F;
+            border: 1px solid #F5CB62;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #F5CB62;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #BD76FF;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #F5CB62;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #211532;
+            border: 1px solid #8B24E8;
+            border-radius: 6px;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #F5CB62;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4B137D;
+            border: 1px solid #F5CB62;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #6B20A8;
+        }
+
+        .login-link {
+            margin-top: 22px;
+            color: #BD76FF;
+        }
+
+        .login-link a {
+            color: #F5CB62;
+            text-decoration: none;
+        }
+
+        .error-message {
+            color: #FF7777;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <h1>CREATE ACCOUNT</h1>
+    <p class="subtitle">Start your academic journey with us!</p>
+
+    <p class="error-message" th:if="${error}" th:text="${error}"></p>
+
+    <form th:action="@{/register}" method="post">
+
+        <div class="input-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name"
+                   placeholder="Enter your name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email"
+                   placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Create a password" required>
+        </div>
+
+        <div class="input-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword"
+                   name="confirmPassword"
+                   placeholder="Re-enter your password" required>
+        </div>
+
+        <button type="submit">Create Account</button>
+
+    </form>
+
+    <p class="login-link">
+        Already have an account?
+        <a th:href="@{/login}">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>

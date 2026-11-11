@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes | Academic Guide</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #08070D;
+            color: #F8F6FC;
+        }
+
+        h1 {
+            color: #F5CB62;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            color: #BD76FF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: #F5CB62;
+        }
+
+        .note-box {
+            margin-top: 25px;
+            padding: 28px;
+            background: #15101F;
+            border: 1px solid #F5CB62;
+            border-radius: 14px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            color: #E6C76A;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0D0914;
+            color: white;
+            border: 1px solid #F5CB62;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
+            outline: 2px solid #BD76FF;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #4B137D;
+            color: white;
+            border: 1px solid #F5CB62;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #6420A0;
+        }
+
+
+
+        @media (max-width: 600px) {
+            main {
+                margin-top: 25px;
+                padding: 0 15px;
+            }
+
+            .note-box {
+                padding: 20px;
+            }
+        }
+        
+        /* Saved notes layout */
+        .saved-notes {
+            margin-top: 32px;
+        }
+
+        .saved-notes h2 {
+            color: #FFFFFF;
+            margin-bottom: 22px;
+        }
+
+        .saved-notes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        /* Keep the heading across the full width */
+        .saved-notes h2,
+        .saved-notes > p {
+        grid-column: 1 / -1;
+        }
+
+        .saved-notes .card {
+            background: #15101F;
+            border: 1px solid #B89435;
+            border-radius: 14px;
+            padding: 22px;
+            min-width: 0;
+            overflow-wrap: anywhere;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .saved-notes .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px #8B24E833;
+        }
+
+        .saved-notes .card h3 {
+            color: #F5CB62;
+            margin-top: 0;
+        }
+
+        .saved-notes .card p {
+            color: #D0C5DF;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 650px) {
+            .saved-notes {
+                grid-template-columns: 1fr;
+        }
+        }
+
+        .note-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .note-actions form {
+            margin: 0;
+        }
+
+        .edit-button {
+            color: #B44CFF;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .edit-button:hover {
+            color: #D29AFF;
+            text-decoration: none;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #E57373;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background: none;
+            border: none;
+            box-shadow: none;
+            color: #8B0000;
+        }
+
+        .note-box p {
+            color: #F5CB62;
+        }
+    </style>
+</head>
+
+<body>
+
+        
+    <main>
+        <a class="back-link" href="/">← Back to Home</a>
+
+        <h1>MY NOTES</h1>
+        
+        <section class="note-box">
+            <h2>Create a Note</h2>
+            <p>Write down important concepts, ideas and reminders.</p>
+
+            
+            <form action="/notes" method="post">
+                
+                <input type="text"
+                    name="title"
+                    th:value="${note.title}"
+                    placeholder="Enter note title"
+                    required>
+
+                <textarea name="content"
+                    th:text="${note.content}"
+                    placeholder="Write your note here..."
+                    required>
+                </textarea>
+
+                <input type="hidden" name="id" th:value="${note.id}">
+
+                <button type="submit"
+                    th:text="${note.id > 0 ? 'Update Note' : 'Save Note'}">
+                    Save Note
+                </button>
+            </form>
+            <section class="saved-notes">
+                <h2>My Saved Notes</h2>
+                <p th:if="${notes == null or #lists.isEmpty(notes)}">
+                    No saved notes yet. Add your first note above!
+                </p>
+                <article th:each="savedNote : ${notes}" class="card">
+                    <h3 th:text="${savedNote.title}">Note title</h3>
+                    <p th:text="${savedNote.content}">Note content</p>
+                <div class="note-actions">
+                    <a th:href="@{/notes/edit/{id}(id=${savedNote.id})}"
+                    class="edit-button">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/notes/delete/{id}(id=${savedNote.id})}"
+                        method="post"
+                        onsubmit="return confirm('Are you sure you want to delete this note?');">
+
+                        <button type="submit" class="delete-button">
+                        Delete
+                        </button>
+                    </form>
+                </div>   
+                </article>
+            </section>
+        </section>
+    </main>
+
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+
+# Maven generated files
+target/
+
+# Uploaded personal PDF files
+uploads/
+
+# IDE files
+.idea/
+*.iml
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+# Personal uploaded PDF files
+uploads/
